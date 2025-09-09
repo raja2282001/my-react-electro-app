@@ -3,18 +3,37 @@
   "version": "1.0.0",
   "main": "electron/main.js",
   "scripts": {
-    "start": "concurrently \"cross-env BROWSER=none npm start --prefix frontend\" \"wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=http://localhost:3000 electron .\"",
-    "build": "npm run build --prefix frontend",
-    "dist": "npm run build && electron-builder"
-  },
+  "start": "concurrently \"cross-env BROWSER=none npm start --prefix frontend\" \"wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=http://localhost:3000 electron .\"",
+  "build": "npm run build --prefix frontend",
+  "dist:win": "npm run build && electron-builder --win",
+  "dist:mac": "npm run build && electron-builder --mac",
+  "dist:linux": "npm run build && electron-builder --linux",
+  "dist:all": "npm run build && electron-builder -mwl"
+},
   "build": {
     "appId": "com.myreact.electroapp",
+    "productName": "MyReactElectroApp",
     "files": [
       "electron/**/*",
       "frontend/build/**/*"
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "extraMetadata": {
+      "main": "electron/main.js"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
     }
   },
   "devDependencies": {

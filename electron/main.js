@@ -1,5 +1,5 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
 
 let mainWindow;
 
@@ -8,32 +8,27 @@ function createWindow() {
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false
     },
   });
 
-  // Load React app in dev, build in prod
   if (process.env.ELECTRON_START_URL) {
-    mainWindow.loadURL(process.env.ELECTRON_START_URL);
+    mainWindow.loadURL(process.env.ELECTRON_START_URL); // Dev mode
   } else {
-    mainWindow.loadFile(path.join(__dirname, "../frontend/build/index.html"));
+    mainWindow.loadFile(path.join(__dirname, '../frontend/build/index.html')); // Production build
   }
 
-  mainWindow.on("closed", () => {
+  mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
-app.on("ready", createWindow);
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+app.on('ready', createWindow);
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
 });
-
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
+app.on('activate', () => {
+  if (mainWindow === null) createWindow();
 });
